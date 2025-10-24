@@ -3,14 +3,13 @@
 document.addEventListener("DOMContentLoaded", function () {
     const sendBtn = document.querySelector(".sendBtn");
     const messageInput = document.getElementById("message-input");
-
     const popup = document.getElementById("loginPopup");
-    const saveBtn = document.getElementById("saveBtn");
-    const userInput = document.getElementById("userInput");
-    
     const blurBg = document.querySelector(".blurBackground");
-
     const hoverBtn = document.querySelector(".loginRDBtn");
+
+    const displayUsername = document.getElementById("displayUsername");
+
+    displayUsername.innerHTML = sessionStorage.getItem("username");
 
     hoverBtn.addEventListener("mouseenter", () => {
         popup.style.backgroundColor = "lightgray";

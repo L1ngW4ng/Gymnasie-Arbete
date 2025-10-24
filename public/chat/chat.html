@@ -9,6 +9,8 @@
 </head>
 <body>
     <div class="blurBackground"></div>
+
+    <h3 id="displayUsername"></h3>
     <!-- Pop up login fönster -->
     <div class="loginPopup" id="loginPopup">
         <!--
@@ -28,7 +30,7 @@
         </div>
     </div>
     <div class="messageBox">
-        <h1>Hej!</h1>
+
     </div>
     <div class="messageContainer">
         <input onkeydown="if(event.key === 'Enter') sendMessage()" type="text" name="Message" id="messageInput" class="messageInput" autocomplete="off" placeholder="Type a message...">

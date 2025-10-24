@@ -13,8 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+const API_URL = window.location.origin;
+
 function login(username, password) {
-    fetch("http://localhost:3000/login", {
+    fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -28,6 +30,7 @@ function login(username, password) {
         sessionStorage.setItem("username", username);
 
         alert("LÄS I LOGIN.JS RAD 30!!!");
+        alert("Lägg till Guest User med vilket namn som helst!");
         /*
             Ändra så att Konto knappen inte bara är för att logga in och registrera,
             utan det ska vara för att ändra konto inställningar?

@@ -1,3 +1,8 @@
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
 * {
     box-sizing: border-box
 }
@@ -14,7 +19,7 @@ button {
     border: 1px solid #ccc;
     background-color: #f1f1f1;
     width: 10%;
-    height: 99vh;
+    height: 98%;
     border-radius: 25px;
     position: fixed;
     padding: 10px;
@@ -112,7 +117,7 @@ button {
 
 
 .messageBox {
-    border: 2px solid black;
+    /* border: 2px solid black; */
     margin-left: 11%;
     max-height: 90%;
 }
@@ -187,4 +192,15 @@ button {
 .loginRDBtn:hover {
     transition: 0.3s;
     background-color: rgba(141, 141, 141, 0.716);
+}
+
+#displayUsername {
+    position: absolute;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    top: 0px;
+    right: 10px;
 }

@@ -13,11 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const birthday = document.getElementById("birthday").value;
 
         register(username, password, email, phonenumber, birthday);
+
     });
 });
 
+const API_URL = window.location.origin;
+
+
+
 function register(username, password, email, phonenumber, birthday) {
-    fetch("http://localhost:3000/register", {
+    fetch(`${ API_URL }/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, email, phonenumber, birthday })
