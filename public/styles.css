@@ -1,0 +1,84 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to right,#d7e1ec,#a4bcd8,#6a81a8,#526fa8);
+    background-size: 300% 300%;
+    animation: bgMove 18s ease infinite;
+    font-family: Arial;
+}
+
+.banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #d7e1ec;
+    background-size: 300% 300%;
+    padding: 60px 120px;
+    box-shadow: 0px 5px 50px rgba(149, 149, 149, 0.6);
+    border-radius: 20px;
+    color: #ffffff;
+    text-align: center;
+    width: 700px;
+    height: 350px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.banner-title {
+    font-size: 100px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.banner-subtitle {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 10px;
+
+    background: linear-gradient(to right, #3c00ff, #ff0000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-rendering: optimizeLegibility;
+    font-weight: bold;
+}
+
+
+.subtitle-large {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.subtitle-small {
+    font-size: 20px;
+}
+
+.banner button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background-color: #667085;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.1s ease;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+.banner button:hover {
+    background-color: #7f8fa4;
+    transform: scale(1.03);
+}
+
+@keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+

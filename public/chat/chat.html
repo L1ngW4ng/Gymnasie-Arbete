@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js"></script>
+</head>
+<body>
+    <div class="blurBackground"></div>
+    <!-- Pop up login fönster -->
+    <div class="loginPopup" id="loginPopup">
+        <!--
+            <input onkeydown="if(event.key === 'Enter') saveUsername(userInput.value.trim())" type="text" class="userInput" id="userInput" placeholder="Username..." autocomplete="off">
+            <button class="saveBtn" id="saveBtn">Login</button>
+        -->
+        <button class="loginRDBtn" onclick="location.href='../choose/choose.html'">Logga in</button>
+    </div>
+
+    <div class="sideTab">
+        <div class="tab">
+            <button onclick="location.href='/chat/chat.html'" id="defaultOpen">Chattar</button>
+            <button onclick="location.href='/servers/servers.html'">Offentliga Servers</button>
+            <button onclick="location.href='/profil/profil.html'">Profil</button>
+            <button onclick="location.href='/inst/settings.html'">Inställningar</button>
+            <button class="loginBtn" onclick="location.href='/choose/choose.html'">Konto</button>
+        </div>
+    </div>
+    <div class="messageBox">
+        <h1>Hej!</h1>
+    </div>
+    <div class="messageContainer">
+        <input onkeydown="if(event.key === 'Enter') sendMessage()" type="text" name="Message" id="messageInput" class="messageInput" autocomplete="off" placeholder="Type a message...">
+        <button onclick="sendMessage()" class="sendBtn" aria-label="Send">
+            <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="27" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+        </button>
+    </div>
+</body>
+</html>
