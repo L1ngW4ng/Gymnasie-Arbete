@@ -10,7 +10,12 @@
 <body>
     <div class="blurBackground"></div>
 
-    <h3 id="displayUsername"></h3>
+    <div id="profile-container">
+        <img id="profile-picture" src="../../uploads/default-profile.png" alt="Profilbild" width="50" height="50">
+        <h3 id="displayName"></h3>
+    </div>
+
+    
     <!-- Pop up login fönster -->
     <div class="loginPopup" id="loginPopup">
         <!--
@@ -22,11 +27,12 @@
 
     <div class="sideTab">
         <div class="tab">
-            <button onclick="location.href='/chat/chat.html'" id="defaultOpen">Chattar</button>
+            <button onclick="location.href='/chat/chat.html'" id="defaultOpen">World Chat</button>
             <button onclick="location.href='/servers/servers.html'">Offentliga Servers</button>
             <button onclick="location.href='/profil/profil.html'">Profil</button>
             <button onclick="location.href='/inst/settings.html'">Inställningar</button>
-            <button class="loginBtn" onclick="location.href='/choose/choose.html'">Konto</button>
+            <button onclick="guestUser()">Guest</button>
+            <button class="loginBtn" onclick="location.href='/choose/choose.html'">Logga in</button>
         </div>
     </div>
     <div class="messageBox">

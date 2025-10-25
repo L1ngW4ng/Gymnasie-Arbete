@@ -194,13 +194,35 @@ button {
     background-color: rgba(141, 141, 141, 0.716);
 }
 
-#displayUsername {
+
+
+#profile-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;       /* Vertikal centering */
+    justify-content: flex-end; /* Allt till höger i containern */
     position: absolute;
+    top: 0;
+    right: 0;
+    margin: 20px;
+    padding: 5px 10px;
+    border: 2px solid black;
+    border-radius: 15px;
+    background-color: rgb(240, 240, 240);
+    width: auto;               /* Anpassar sig efter innehållet */
+}
+
+#profile-container #profile-picture {
+    border-radius: 10px;
     border: 2px solid black;
     border-radius: 10px;
-    width: auto;
-    height: auto;
-    padding: 10px;
-    top: 0px;
-    right: 10px;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;        /* Avstånd mellan bild och namn */
+    /* object-fit: cover; */         /* Beskär bilden snyggt */
+}
+
+#profile-container #displayName {
+    margin: 0;                 /* Ta bort onödiga marginals */
+    font-size: 1em;
 }

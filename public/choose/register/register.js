@@ -22,19 +22,25 @@ const API_URL = window.location.origin;
 
 
 function register(username, password, email, phonenumber, birthday) {
+    const profilePictureInput = document.getElementById("profile_picture");
+
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("email", email);
+    formData.append("phonenumber", phonenumber);
+    formData.append("birthday", birthday);
+    if(profilePictureInput.files.length > 0) {
+        formData.append("profile_picture", profilePictureInput.files[0]);
+    }
+
     fetch(`${ API_URL }/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, email, phonenumber, birthday })
-    })
-    .then(res => {
-        if(!res.ok) throw new Error("Fel vid registrering");
-        return res.text();
+        body: formData,
     })
     .then(msg => {
         console.log(msg);
-        alert("Registrering lyckades! Du kan nu logga in.");
-
+        alert("Registreringen lyckades! Du kan nu logga in.");
         window.location.href = "../login/login.html";
     })
     .catch(err => {
