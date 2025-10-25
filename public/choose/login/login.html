@@ -4,25 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <script src="login.js"></script>
+    <script src="login.js" defer></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="login">
-        <h1 class="title">Login</h1>
+    <div class="login-wrapper">
+        <h1 class="login-title">Welcome Back 👋</h1>
+        <p class="login-subtitle">Log in to continue chatting</p>
 
-        <p>Username:</p>
-        <input type="text" id="usernameInput" autocomplete="off">
+        <div class="login-container">
+            <div class="login-box">
+                <label for="usernameInput">Username</label>
+                <input type="text" id="usernameInput" autocomplete="off" placeholder="Your username">
+            </div>
 
-        <br><br>
+            <div class="login-box">
+                <label for="passwordInput">Password</label>
+                <input type="password" id="passwordInput" autocomplete="off" placeholder="Your password">
+            </div>
 
-        <p>Password:</p>
-        <input type="password" id="passwordInput" autocomplete="off">
+            <button id="loginBtn" class="login-btn">Log In</button>
 
-        <br><br>
-
-        <button id="loginBtn">Logga in</button>
+            <p class="login-register-text">
+                Don’t have an account? 
+                <a href="../register/register.html" class="register-link">Register here</a>
+            </p>
+        </div>
     </div>
-    
 </body>
 </html>

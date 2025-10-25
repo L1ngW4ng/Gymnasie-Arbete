@@ -4,31 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <script src="register.js"></script>
+    <script src="register.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Register</h1>
+    <div class="register-wrapper">
+        <h1 class="register-title">Create Your Account</h1>
 
-    <div class="container">
-        <p>Profile Picture:</p>
-        <input type="file" id="profile_picture" accept="image/*">
+        <div class="register-container">
+            <div class="register-box">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" id="profile_picture" accept="image/*">
+            </div>
 
-        <p>E-mail:</p>
-        <input type="email" id="email" autocomplete="off">
+            <div class="register-box">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" autocomplete="off" placeholder="example@email.com">
+            </div>
 
-        <p>Phone Number:</p>
-        <input type="text" id="phonenumber" autocomplete="off">
+            <div class="register-box">
+                <label for="phonenumber">Phone Number</label>
+                <input type="text" id="phonenumber" autocomplete="off" placeholder="+46 70 123 45 67">
+            </div>
 
-        <p>Birthday:</p>
-        <input type="date" id="birthday" autocomplete="off">
+            <div class="register-box">
+                <label for="birthday">Birthday</label>
+                <input type="date" id="birthday">
+            </div>
 
-        <p>Username:</p>
-        <input type="text" id="username" autocomplete="off">
+            <div class="register-box">
+                <label for="username">Username</label>
+                <input type="text" id="username" autocomplete="off" placeholder="Choose a username">
+            </div>
 
-        <p>Password:</p>
-        <input type="password" id="password" autocomplete="off">
+            <div class="register-box">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Choose a password">
+            </div>
 
-        <button id="registerBtn">Register</button>
+            <button id="registerBtn" class="register-btn">Register</button>
+        </div>
     </div>
 </body>
 </html>

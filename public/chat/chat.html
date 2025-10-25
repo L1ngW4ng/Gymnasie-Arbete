@@ -1,51 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
 </head>
 <body>
     <div class="blurBackground"></div>
 
-    <div id="profile-container">
-        <img id="profile-picture" src="../../uploads/default-profile.png" alt="Profilbild" width="50" height="50">
-        <h3 id="displayName"></h3>
-    </div>
-
-    
-    <!-- Pop up login fönster -->
-    <div class="loginPopup" id="loginPopup">
-        <!--
-            <input onkeydown="if(event.key === 'Enter') saveUsername(userInput.value.trim())" type="text" class="userInput" id="userInput" placeholder="Username..." autocomplete="off">
-            <button class="saveBtn" id="saveBtn">Login</button>
-        -->
-        <button class="loginRDBtn" onclick="location.href='../choose/choose.html'">Logga in</button>
-    </div>
-
-    <div class="sideTab">
+    <aside class="sideTab">
         <div class="tab">
-            <button onclick="location.href='/chat/chat.html'" id="defaultOpen">World Chat</button>
-            <button onclick="location.href='/servers/servers.html'">Offentliga Servers</button>
-            <button onclick="location.href='/profil/profil.html'">Profil</button>
-            <button onclick="location.href='/inst/settings.html'">Inställningar</button>
-            <button onclick="guestUser()">Guest</button>
-            <button class="loginBtn" onclick="location.href='/choose/choose.html'">Logga in</button>
+            <button onclick="location.href='/chat/chat.html'" class="active">🌍 World Chat</button>
+            <button onclick="location.href='/servers/servers.html'">💬 Offentliga Servers</button>
+            <button onclick="location.href='/profil/profil.html'">👤 Profil</button>
+            <button onclick="location.href='/inst/settings.html'">⚙️ Inställningar</button>
+            <button onclick="guestUser()">🎭 Guest</button>
+            <button class="loginBtn" onclick="location.href='/choose/choose.html'">🔑 Logga in</button>
         </div>
-    </div>
-    <div class="messageBox">
+    </aside>
 
-    </div>
-    <div class="messageContainer">
-        <input onkeydown="if(event.key === 'Enter') sendMessage()" type="text" name="Message" id="messageInput" class="messageInput" autocomplete="off" placeholder="Type a message...">
-        <button onclick="sendMessage()" class="sendBtn" aria-label="Send">
-            <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="27" x2="12" y2="5"></line>
-                <polyline points="5 12 12 5 19 12"></polyline>
-            </svg>
-        </button>
+    <main class="chatArea">
+        <div id="profile-container">
+            <img id="profile-picture" src="../../uploads/default-profile.png" alt="Profilbild">
+            <h3 id="displayName">Användare</h3>
+        </div>
+
+        <div class="messageBox" id="messageBox"></div>
+
+        <div class="messageContainer">
+            <input type="text" id="messageInput" class="messageInput" placeholder="Skriv ett meddelande...">
+            <button onclick="sendMessage()" class="sendBtn" aria-label="Skicka">
+                <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="27" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <div class="loginPopup" id="loginPopup">
+        <button class="loginRDBtn" onclick="location.href='../choose/choose.html'">Logga in</button>
     </div>
 </body>
 </html>
