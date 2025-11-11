@@ -117,10 +117,23 @@ button {
 
 
 .messageBox {
-    /* border: 2px solid black; */
+    border: 2px solid lightgray;
+    border-radius: 20px;
     margin-left: 11%;
-    max-height: 90%;
+    max-height: calc(100% - 70px);
+    height: calc(100% - 70px);
+    overflow-y: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    scrollbar-width: none;
 }
+
+
+/*
+.messageBox::-webkit-scrollbar {
+    max-height: calc(100% - 10px);
+}
+*/
 
 .blurBackground {
     position: fixed;
@@ -202,8 +215,8 @@ button {
     align-items: center;       /* Vertikal centering */
     justify-content: flex-end; /* Allt till höger i containern */
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -1px;
+    right: 5px;
     margin: 20px;
     padding: 5px 10px;
     border: 2px solid black;
