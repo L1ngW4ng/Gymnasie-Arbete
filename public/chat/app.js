@@ -40,7 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
     hoverBtn.addEventListener("mouseleave", () => popup.style.backgroundColor = "rgba(141,141,141,0.716)");
 
     // === WebSocket ===
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket("wss://gymnasie-arbete-ws-server.onrender.com");
+
 
     ws.addEventListener("open", () => console.log("WebSocket connected"));
 

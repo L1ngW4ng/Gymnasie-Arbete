@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-const API_URL = window.location.origin;
+const API_URL = `https://gymnasie-arbete-server.onrender.com`;
 
 function login(username, password) {
     fetch(`${API_URL}/login`, {

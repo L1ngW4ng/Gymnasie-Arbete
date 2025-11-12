@@ -1,21 +1,24 @@
-// Importera WebSocket-biblioteket
-const WebSocket = require('ws');
+// ===== WebSocket-server för Render =====
+const WebSocket = require("ws");
 
-// Skapa en WebSocket-server som lyssnar på port 8080
-const wss = new WebSocket.Server({ port: 8080 });
+// Render tilldelar en port via miljövariabeln PORT
+const PORT = process.env.PORT || 8080;
 
-console.log("WebSocket-server startad på ws://localhost:8080");
+// Skapa WebSocket-servern
+const wss = new WebSocket.Server({ port: PORT });
 
-// När en klient ansluter:
-wss.on('connection', (ws) => {
-  console.log("New connection.");
+console.log(`WebSocket-server startad på port ${PORT}`);
 
-  // När servern får ett meddelande från en klient
-  ws.on('message', (message) => {
-    console.log(`Client: ${message}`);
+// När en klient ansluter
+wss.on("connection", (ws) => {
+  console.log("Ny klient ansluten.");
 
-    // Skicka vidare till ALLA klienter som är uppkopplade
-    wss.clients.forEach(client => {
+  // När ett meddelande tas emot från en klient
+  ws.on("message", (message) => {
+    console.log(`Meddelande från klient: ${message}`);
+
+    // Skicka vidare meddelandet till alla anslutna klienter
+    wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(message.toString());
       }
@@ -23,7 +26,7 @@ wss.on('connection', (ws) => {
   });
 
   // När klienten kopplar från
-  ws.on('close', () => {
-    console.log("Client disconnected");
+  ws.on("close", () => {
+    console.log("Klient frånkopplad.");
   });
 });

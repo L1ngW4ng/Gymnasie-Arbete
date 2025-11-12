@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-const API_URL = window.location.origin;
+const API_URL = `https://gymnasie-arbete-server.onrender.com`;
 
 
 
@@ -34,7 +34,7 @@ function register(username, password, email, phonenumber, birthday) {
         formData.append("profile_picture", profilePictureInput.files[0]);
     }
 
-    fetch(`${ API_URL }/register`, {
+    fetch(`${API_URL}/register`, {
         method: "POST",
         body: formData,
     })

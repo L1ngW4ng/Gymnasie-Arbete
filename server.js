@@ -4,13 +4,15 @@ const bcrypt = require("bcrypt");
 const { Pool } = require("pg");
 const path = require("path");
 const multer = require("multer");
+const cors = require("cors");
 
+// === Databasanslutning (Render PostgreSQL) ===
 const db = new Pool({
     connectionString: "postgresql://users_db_bkrh_user:NKQoLAJkgG63jL7AhFaCsNOb85rfNu7F@dpg-d3tsnf49c44c73e9jcog-a.frankfurt-postgres.render.com/users_db_bkrh",
     ssl: { rejectUnauthorized: false },
 });
 
-// Multer för profilbilder
+// === Multer för profilbilder ===
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, path.join(__dirname, "uploads"));
@@ -23,7 +25,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// === Express-app ===
 const app = express();
+
+// Tillåt frontend att anropa API:t
+app.use(cors());
+
+// Middleware
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -114,8 +122,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-
 // === Starta server ===
 app.listen(PORT, () => {
-    console.log(`Servern kör på http://localhost:${PORT}`);
+    console.log(`Servern kör på port ${PORT}`);
 });
