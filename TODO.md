@@ -1,4 +1,12 @@
+EXTREME TODOS:
+// TODO: Server needs to send JSON to frontend
+
+// FIXME: Get profile picture to load!!!
+
+
 BIG TODOS:
+
+
 
 // TODO: Configure to Render to host servers + the whle frontend
 // TODO: Add DM functions and add to the database structure

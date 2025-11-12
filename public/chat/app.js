@@ -9,23 +9,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const msgBox = document.querySelector(".messageBox");
     const API_URL = window.location.origin;
 
-    // === Guest om ingen username finns ===
-    let username = sessionStorage.getItem("username");
-    if (!username) {
+    // === Hämta användardata från sessionStorage ===
+    let userData = JSON.parse(sessionStorage.getItem("userData"));
+    let username, profile_picture;
+
+    // === Om ingen användare finns, skapa gäst ===
+    if (!userData) {
         username = "Guest" + Math.floor(Math.random() * 1000);
-        sessionStorage.setItem("username", username);
+        profile_picture = `${API_URL}/uploads/default-profile.png`;
+        userData = { username, profile_picture };
+        sessionStorage.setItem("userData", JSON.stringify(userData));
+    } else {
+        username = userData.username;
+        profile_picture = userData.profile_picture ? `${API_URL}/uploads/${userData.profile_picture}` : `${API_URL}/uploads/default-profile.png`;
     }
 
     // === Visa profil ===
-    function updateProfileDisplay(user) {
+    function updateProfileDisplay(username, profile_picture) {
+        const imgSrc = profile_picture || `${API_URL}/uploads/default-profile.png`;
         displayContainer.innerHTML = `
-            <img id="profile-picture" src="${API_URL}/uploads/default-profile.png" alt="${user}" width="50" height="50">
-            <h3 id="displayUsername">${user}</h3>
+            <img id="profile-picture" src="${imgSrc}" alt="${username}" width="50" height="50">
+            <h3 id="displayUsername">${username}</h3>
         `;
     }
-    updateProfileDisplay(username);
 
-    // === Hover på popup knapp ===
+    updateProfileDisplay(username, profile_picture);
+
+    // === Hover på popup-knapp ===
     hoverBtn.addEventListener("mouseenter", () => popup.style.backgroundColor = "lightgray");
     hoverBtn.addEventListener("mouseleave", () => popup.style.backgroundColor = "rgba(141,141,141,0.716)");
 
@@ -34,9 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     ws.addEventListener("open", () => console.log("WebSocket connected"));
 
-
-    // TODO: lägg till notis om någon har skrivit ett nytt meddelande när man scrollar uppåt
-    
     ws.addEventListener("message", (event) => {
         const data = JSON.parse(event.data);
 
@@ -44,18 +51,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const distanceFromBottom = msgBox.scrollHeight - msgBox.scrollTop - msgBox.clientHeight;
 
         if (data.username === username) {
-            // Mitt eget meddelande → alltid scrolla ner
             msgBox.innerHTML += `<p><strong>You:</strong> ${escapeHtml(data.message)}</p>`;
             msgBox.scrollTop = msgBox.scrollHeight;
         } else {
-            // Andras meddelande → scrolla endast om vi är nära botten (<100px)
             msgBox.innerHTML += `<p><strong>${escapeHtml(data.username)}:</strong> ${escapeHtml(data.message)}</p>`;
             if (distanceFromBottom <= 50) {
                 msgBox.scrollTop = msgBox.scrollHeight;
             }
         }
     });
-
 
     ws.addEventListener("close", () => console.log("WebSocket closed"));
     ws.addEventListener("error", e => console.error("WebSocket error", e));
@@ -73,10 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Klick på send-knapp
     sendBtn.addEventListener("click", sendMessage);
-
-    // Enter-tangent
     messageInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -84,29 +85,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // === Kontrollera om elementet är längst ner ===
-    function isScrolledToBottom(el) {
-        return el.scrollHeight - el.scrollTop === el.clientHeight;
-    }
-
     // === Guest-knapp ===
     window.guestUser = function() {
-        username = "Guest" + Math.floor(Math.random() * 1000);
-        sessionStorage.setItem("username", username);
-        updateProfileDisplay(username);
+        const guestName = "Guest" + Math.floor(Math.random() * 1000);
+        const guestPic = `${API_URL}/uploads/default-profile.png`;
+        sessionStorage.setItem("userData", JSON.stringify({ username: guestName, profile_picture: guestPic }));
+        updateProfileDisplay(guestName, guestPic);
     };
 
     // === Popup login-spara ===
     window.saveUsername = function(userName) {
         if (!userName) return;
-        username = userName.trim();
-        sessionStorage.setItem("username", username);
+        const newUserData = { username: userName.trim(), profile_picture: profile_picture };
+        sessionStorage.setItem("userData", JSON.stringify(newUserData));
         popup.style.visibility = "hidden";
         blurBg.style.visibility = "hidden";
-        updateProfileDisplay(username);
+        updateProfileDisplay(newUserData.username, newUserData.profile_picture);
     };
 
-    // === Enkel HTML-escape för säkerhet ===
+    // === Enkel HTML-escape ===
     function escapeHtml(text) {
         return text
             .replace(/&/g, "&amp;")

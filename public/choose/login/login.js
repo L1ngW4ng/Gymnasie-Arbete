@@ -1,14 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     const loginBtn = document.getElementById("loginBtn");
 
-
-
-
-
     loginBtn.addEventListener("click", () => {
         const username = document.getElementById("usernameInput").value.trim();
         const password = document.getElementById("passwordInput").value;
-
         login(username, password);
     });
 });
@@ -22,14 +17,22 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     })
     .then(res => {
-        if(!res.ok) throw new Error("Fel vid inloggningen");
-        return res.text();
+        if (!res.ok) throw new Error("Fel vid inloggningen");
+        return res.json();
     })
-    .then(msg => {
-        console.log(msg);
-        sessionStorage.setItem("username", username);
+    .then(data => {
+        if (!data.success) {
+            throw new Error(data.message || "Felaktigt användarnamn eller lösenord");
+        }
 
-        alert("LÄS I LOGIN.JS RAD 30!!!");
+        // Save full user data
+        const user = data.userData;
+        sessionStorage.setItem("username", user.username);
+        sessionStorage.setItem("userData", JSON.stringify(user));
+
+        console.log("Inloggning lyckades:", user);
+
+        alert("LÄS I LOGIN.JS RAD 34!!!");
         alert("Lägg till Guest User med vilket namn som helst!");
         /*
             Ändra så att Konto knappen inte bara är för att logga in och registrera,
@@ -41,10 +44,11 @@ function login(username, password) {
             Sen i inställningar så får man ändra lösenord, hantera login, allt sånt tekniskt.
         */
 
-
         window.location.href = "../../chat/chat.html";
     })
     .catch(err => {
         alert("Inloggning misslyckades: " + err.message);
     });
 }
+
+
