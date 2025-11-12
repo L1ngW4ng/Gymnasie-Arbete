@@ -7,7 +7,7 @@ const path = require("path");
 const multer = require("multer");
 
 const db = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: "postgresql://users_db_bkrh_user:NKQoLAJkgG63jL7AhFaCsNOb85rfNu7F@dpg-d3tsnf49c44c73e9jcog-a.frankfurt-postgres.render.com/users_db_bkrh",
     ssl: { rejectUnauthorized: false },
 });
 
