@@ -216,7 +216,7 @@ button {
     justify-content: flex-end; /* Allt till höger i containern */
     position: absolute;
     top: -1px;
-    right: 5px;
+    right: 0px;
     margin: 20px;
     padding: 5px 10px;
     border: 2px solid black;

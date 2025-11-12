@@ -1,7 +1,4 @@
 EXTREME TODOS:
-// TODO: Server needs to send JSON to frontend
-
-// FIXME: Get profile picture to load!!!
 
 
 BIG TODOS:
@@ -12,7 +9,6 @@ BIG TODOS:
 // TODO: Add DM functions and add to the database structure
 
 // FIXME: Fix GUI, more colors, better CSS with sidepanel and text cropping and everything
-// FIXME: Profile pictures are not loading???
 
 
 

@@ -32,18 +32,6 @@ function login(username, password) {
 
         console.log("Inloggning lyckades:", user);
 
-        alert("LÄS I LOGIN.JS RAD 34!!!");
-        alert("Lägg till Guest User med vilket namn som helst!");
-        /*
-            Ändra så att Konto knappen inte bara är för att logga in och registrera,
-            utan det ska vara för att ändra konto inställningar?
-
-            Eller så byter du namn till Logga in och så är den bara till att logga in och registrera och om man vill
-            ändra konto inställningar så får man fixa det i inställningar, kanske i profil. Men profil ska vara mer offentliga saker:
-            Bio, profilbild, namn, födelsedag och allt sånt.
-            Sen i inställningar så får man ändra lösenord, hantera login, allt sånt tekniskt.
-        */
-
         window.location.href = "../../chat/chat.html";
     })
     .catch(err => {
