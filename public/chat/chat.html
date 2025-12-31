@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="app.js"></script>
 </head>
-<body>
+<body>  
     <div class="blurBackground"></div>
 
     <div id="profile-container">
@@ -25,12 +25,16 @@
         <button class="loginRDBtn" onclick="location.href='../choose/choose.html'">Logga in</button>
     </div>
 
+    <div class="server-notifications" id="server-notifications">
+        <p id="notification-message"></p>
+    </div>
+
     <div class="sideTab">
         <div class="tab">
-            <button onclick="location.href='/chat/chat.html'" id="defaultOpen">World Chat</button>
-            <button onclick="location.href='/servers/servers.html'">Offentliga Servers</button>
+            <button onclick="location.href='/chat/chat.html'" id="defaultOpen">Servers</button>
+            <button onclick="location.href='/servers/servers.html'">DM</button>
             <button onclick="location.href='/profil/profil.html'">Profil</button>
-            <button onclick="location.href='/inst/settings.html'">Inställningar</button>
+            <button onclick="location.href='/inst/settings.html'">Settings</button>
             <button onclick="guestUser()">Guest</button>
             <button class="loginBtn" onclick="location.href='/choose/choose.html'">Logga in</button>
         </div>

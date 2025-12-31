@@ -2,14 +2,18 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-const { Pool } = require("pg");
 const path = require("path");
 const multer = require("multer");
+const db = require("./database");
 
+// Allt detta är till Render
+// const { Pool } = require("pg");
+/*
 const db = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
 });
+*/
 
 // Multer för profilbilder
 const storage = multer.diskStorage({

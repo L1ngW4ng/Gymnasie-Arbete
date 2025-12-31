@@ -1,11 +1,12 @@
 EXTREME TODOS:
+// Render isn't free and isn't suitable, localhost works for now
+// Possible using the raspberry pi for hosting, but it may lag and is not scalable.
+
 
 
 BIG TODOS:
 
-
-
-// TODO: Configure to Render to host servers + the whle frontend
+FIXMES:
 // TODO: Add DM functions and add to the database structure
 
 // FIXME: Fix GUI, more colors, better CSS with sidepanel and text cropping and everything
