@@ -37,22 +37,22 @@ const PORT = process.env.PORT || 3000;
 
 // === Root route ===
 app.get("/", (req, res) => {
-    res.json({ message: "Servern fungerar!" });
+    res.json({ message: "The server works!" });
 });
 
 // === Hämta användardata ===
 app.get("/user/:username", async (req, res) => {
     const { username } = req.params;
-    if (!username) return res.status(400).json({ error: "Saknas username" });
+    if (!username) return res.status(400).json({ error: "Username missing" });
 
     try {
         const result = await db.query("SELECT username, profile_picture FROM users WHERE username = $1", [username]);
-        if (result.rowCount === 0) return res.status(404).json({ error: "Användare finns inte" });
+        if (result.rowCount === 0) return res.status(404).json({ error: "User not found" });
 
         res.json(result.rows[0]);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Fel vid databasförfrågan" });
+        res.status(500).json({ error: "Error in database query" });
     }
 });
 
@@ -62,7 +62,7 @@ app.post("/register", upload.single("profile_picture"), async (req, res) => {
     const profile_picture = req.file ? req.file.filename : null;
 
     if (!username || !password)
-        return res.status(400).json({ success: false, message: "Saknas username eller password" });
+        return res.status(400).json({ success: false, message: "Username or password missing" });
 
     try {
         const hash = await bcrypt.hash(password, 10);
@@ -72,13 +72,13 @@ app.post("/register", upload.single("profile_picture"), async (req, res) => {
             [username, hash, email, phonenumber, birthday, profile_picture]
         );
 
-        res.json({ success: true, message: "Registrering lyckades!" });
+        res.json({ success: true, message: "Registration successful!" });
     } catch (err) {
         console.error(err);
         if (err.code === "23505") {
-            res.status(400).json({ success: false, message: "Användarnamnet finns redan!" });
+            res.status(400).json({ success: false, message: "Username already exists!" });
         } else {
-            res.status(500).json({ success: false, message: "Fel i databasen eller indata." });
+            res.status(500).json({ success: false, message: "Error in database or input." });
         }
     }
 });
@@ -88,23 +88,22 @@ app.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password)
-        return res.status(400).json({ success: false, message: "Saknas username eller password" });
+        return res.status(400).json({ success: false, message: "Username or password missing" });
 
     try {
         const result = await db.query("SELECT * FROM users WHERE username = $1", [username]);
         const user = result.rows[0];
 
         if (!user)
-            return res.status(400).json({ success: false, message: "Fel användarnamn eller lösenord" });
+            return res.status(400).json({ success: false, message: "Wrong username or password" });
 
         const match = await bcrypt.compare(password, user.password);
         if (!match)
-            return res.status(400).json({ success: false, message: "Fel användarnamn eller lösenord" });
-
+            return res.status(400).json({ success: false, message: "Wrong username or password" });
         // ✅ Skicka JSON med användardata
         res.json({
             success: true,
-            message: "Inloggning lyckades!",
+            message: "Login successful!",
             userData: {
                 id: user.id,
                 username: user.username,
@@ -115,12 +114,12 @@ app.post("/login", async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ success: false, message: "Fel vid databasförfrågan" });
+        res.status(500).json({ success: false, message: "Error in database query" });
     }
 });
 
 
 // === Starta server ===
 app.listen(PORT, () => {
-    console.log(`Servern kör på http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });

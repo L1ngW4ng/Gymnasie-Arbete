@@ -22,7 +22,7 @@ const pool = new Pool({
         bio TEXT
       )
     `);
-    console.log("Databasen är redo");
+    console.log("Database is ready");
   } catch (err) {
     console.error("DB-fel:", err);
   }

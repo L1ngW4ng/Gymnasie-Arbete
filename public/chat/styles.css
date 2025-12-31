@@ -11,9 +11,11 @@ body {
     font-family: "Lato", sans-serif;
 }
 
+/*
 button {
     border-radius: 25px;
 }
+*/
 
 .sideTab {
     overflow-y: auto;
@@ -26,12 +28,6 @@ button {
     border-radius: 25px;
     position: fixed;
     padding: 10px;
-}
-
-@media (max-width: 900px) {
-    .sideTab {
-        display: none;
-    }
 }
 
 .tab {
@@ -95,7 +91,8 @@ button {
 .messageContainer {
     position: fixed;
     bottom: 5px;
-    left: 178px;
+    /* left: 178px; */
+    margin-left: 11%;
     width: calc(89% - 20px);
     display: flex;
     align-items: center;
@@ -257,18 +254,69 @@ button {
     font-size: 1em;
 }
 
-/*
-#server-notifications {
-    position: fixed;
-    top: 10px;
+
+.server-notifications {
+    z-index: 9999 !important;
+    display: flex;            /* Make it a flex container */
+    flex-direction: row;      /* Keep items in a row */
+    align-items: center;      /* Vertically center text and button */
+    position: absolute;
     left: 50%;
-    transform: translateX(-50%);
-    background-color: #ffcc00;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 2px solid black;
-    z-index: 1000;
-    display: none;
+    transform: translateX(-50%); /* Center horizontally */
+    border: 2px solid rgb(160, 159, 159);
+    border-radius: 25px;
+    padding: 10px 20px;       /* Adjust padding for spacing */
+    background-color: rgb(236, 236, 236);
+    top: 5%;
+    gap: 10px;                /* Space between text and button */
 }
-*/
+
+.notification-message p {
+    margin: 30px 0;            /* Space between paragraphs */
+}
+.notification-message {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap: -20px;
+    padding: -20px;
+}
+
+.notification-cross {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.notification-cross:hover {
+    /* font-size: 20px; */
+    font-weight: bolder;
+}
+
+
+
+@media (max-width: 900px) {
+    .sideTab {
+        width: 30px;
+        padding: 5px;
+        left: -20px;
+    }
+
+    .sideTab button {
+        display: none;
+    }
+
+    
+    .messageBox {
+        margin-left: 15px;
+        width: calc(100% - 30px);
+    }
+
+    .messageContainer {
+        margin-left: 15px;
+        width: calc(100% - 30px);
+    }
+}

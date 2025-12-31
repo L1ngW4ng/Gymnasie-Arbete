@@ -4,7 +4,7 @@ const WebSocket = require('ws');
 // Skapa en WebSocket-server som lyssnar på port 8080
 const wss = new WebSocket.Server({ port: 8080 });
 
-console.log("WebSocket-server startad på ws://localhost:8080");
+console.log("WebSocket-server started on ws://localhost:8080");
 
 // När en klient ansluter:
 wss.on('connection', (ws) => {

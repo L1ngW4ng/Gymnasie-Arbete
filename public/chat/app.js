@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const msgBox = document.querySelector(".messageBox");
     const API_URL = window.location.origin;
 
+    // Server notification elements
+    const notification = document.getElementById("server-notifications");
+
     // === Hämta användardata från sessionStorage ===
     let userData = JSON.parse(sessionStorage.getItem("userData"));
     let username, profile_picture;
@@ -21,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sessionStorage.setItem("userData", JSON.stringify(userData));
     } else {
         username = userData.username;
-        profile_picture = userData.profile_picture ? `${API_URL}/uploads/${userData.profile_picture}` : `${API_URL}/uploads/default-profile.png`;
+        profile_picture = userData.profile_picture || `${API_URL}/uploads/default-profile.png`;
     }
 
     // === Visa profil ===
@@ -39,6 +42,19 @@ document.addEventListener("DOMContentLoaded", function () {
     hoverBtn.addEventListener("mouseenter", () => popup.style.backgroundColor = "lightgray");
     hoverBtn.addEventListener("mouseleave", () => popup.style.backgroundColor = "rgba(141,141,141,0.716)");
 
+    // === Server notification close button ===
+    // const notification = document.getElementById("server-notifications");
+    if (notification) {
+        const notificationCross = notification.querySelector(".notification-cross");
+        if (notificationCross) {
+            notificationCross.addEventListener("click", () => {
+                notification.style.display = "none";
+            });
+        }
+    }
+
+
+
     // === WebSocket ===
     const ws = new WebSocket('ws://localhost:8080');
 
@@ -47,22 +63,39 @@ document.addEventListener("DOMContentLoaded", function () {
     ws.addEventListener("message", (event) => {
         const data = JSON.parse(event.data);
 
-        // Hur långt från botten är vi?
-        const distanceFromBottom = msgBox.scrollHeight - msgBox.scrollTop - msgBox.clientHeight;
+        // Check if user was near bottom
+        const wasNearBottom = msgBox.scrollTop + msgBox.clientHeight >= msgBox.scrollHeight - 50;
 
+        // Create message element
+        const p = document.createElement("p");
         if (data.username === username) {
-            msgBox.innerHTML += `<p><strong>You:</strong> ${escapeHtml(data.message)}</p>`;
-            msgBox.scrollTop = msgBox.scrollHeight;
+            p.innerHTML = `<strong>You:</strong> ${escapeHtml(data.message)}`;
         } else {
-            msgBox.innerHTML += `<p><strong>${escapeHtml(data.username)}:</strong> ${escapeHtml(data.message)}</p>`;
-            if (distanceFromBottom <= 50) {
-                msgBox.scrollTop = msgBox.scrollHeight;
-            }
+            p.innerHTML = `<strong>${escapeHtml(data.username)}:</strong> ${escapeHtml(data.message)}`;
+        }
+
+        msgBox.appendChild(p);
+
+        // Scroll only if user was near bottom
+        if (wasNearBottom) {
+            msgBox.scrollTop = msgBox.scrollHeight;
         }
     });
 
-    ws.addEventListener("close", () => console.log("WebSocket closed"));
-    ws.addEventListener("error", e => console.error("WebSocket error", e));
+    ws.addEventListener("close", () => {
+        console.log("WebSocket closed");
+        showServerOfflineMessage();
+    });
+
+    ws.addEventListener("error", (e) => {
+        console.error("WebSocket error", e);
+        showServerOfflineMessage();
+    });
+
+    function showServerOfflineMessage() {
+        notification.style.display = "flex"; // Show the notification
+        console.log("Server is offline notification shown");
+    }
 
     // === Skicka meddelande ===
     function sendMessage() {
@@ -74,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
             messageInput.value = "";
         } else {
             console.warn("WebSocket är inte öppen!");
+            showServerOfflineMessage();
         }
     }
 
@@ -103,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateProfileDisplay(newUserData.username, newUserData.profile_picture);
     };
 
-    // === Enkel HTML-escape ===
+    // === HTML-escape ===
     function escapeHtml(text) {
         return text
             .replace(/&/g, "&amp;")
