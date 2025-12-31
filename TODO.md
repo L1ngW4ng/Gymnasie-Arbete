@@ -1,12 +1,16 @@
 1:
+// FIXME: Om man har varit på samma konto och sen ena går över till guest, då kommer det fortfarande stå "You:" på det andra kontot när du skriver
 
+Exempel:
+L1ngW4ng(1): Hej! -> Det står You:
+L1ngW4ng(2)       -> Det står You:
+
+L1ngW4ng(1): Hej! -> Det står You:
+Guest514(2)       -> Det står fortfarande You:, fast att det ska stå L1ngW4ng: eftersom det är inte samma användare som skriver!
 
 
 
 3:
-// TODO: Add server notification message. Example:
-// If someone tries to write a message but the server is off, the user will know that the server is down.
-
 // TODO: Add DM functions and add to the database structure
 
 // FIXME: Fix GUI, more colors, better CSS with sidepanel and text cropping and everything

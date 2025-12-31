@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const displayContainer = document.getElementById("profile-container");
     const msgBox = document.querySelector(".messageBox");
     const API_URL = window.location.origin;
+    const room_id = "general";
+
+    let tabID = sessionStorage.getItem("tabID");
+    if (!tabID) {
+        tabID = Math.random().toString(36).substring(2, 9);
+    }
 
     // Server notification elements
     const notification = document.getElementById("server-notifications");
@@ -20,12 +26,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!userData) {
         username = "Guest" + Math.floor(Math.random() * 1000);
         profile_picture = `${API_URL}/uploads/default-profile.png`;
-        userData = { username, profile_picture };
+        userData = { username, profile_picture: null }; // store null for guest
         sessionStorage.setItem("userData", JSON.stringify(userData));
     } else {
         username = userData.username;
-        profile_picture = userData.profile_picture || `${API_URL}/uploads/default-profile.png`;
+        // if profile_picture exists, prepend /uploads/ to the filename
+        profile_picture = userData.profile_picture
+            ? `${API_URL}/uploads/${userData.profile_picture}`
+            : `${API_URL}/uploads/default-profile.png`;
     }
+
 
     // === Visa profil ===
     function updateProfileDisplay(username, profile_picture) {
@@ -55,6 +65,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+    async function loadMessages() {
+        try {
+            const res = await fetch(`${API_URL}/test/messages/${room_id}`);
+            const messages = await res.json();
+
+            msgBox.innerHTML = "";
+            messages.forEach(msg => {
+                const p = document.createElement("p");
+                if (msg.sender === username) {
+                    p.innerHTML = `<strong>You:</strong> ${escapeHtml(msg.content)}`;
+                } else {
+                    p.innerHTML = `<strong>${escapeHtml(msg.sender)}:</strong> ${escapeHtml(msg.content)}`;
+                }
+                msgBox.appendChild(p);
+            });
+
+            msgBox.scrollTop = msgBox.scrollHeight;
+        } catch (err) {
+            console.error("Error loading messages:", err);
+        }
+    }
+
+    loadMessages();
+
+
+
+    async function saveMessageToDB(content) {
+        try {
+            await fetch(`${API_URL}/test/message`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    room_id: room_id,
+                    sender: username,
+                    content
+                })
+            });
+        } catch (err) {
+            console.error("Error saving message to database:", err);
+        }
+    }
+
+
     // === WebSocket ===
     const ws = new WebSocket('ws://localhost:8080');
 
@@ -76,8 +131,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         msgBox.appendChild(p);
 
-        // Scroll only if user was near bottom
-        if (wasNearBottom) {
+        if (data.tabID === tabID) {
+            msgBox.scrollTop = msgBox.scrollHeight;
+        } else if (wasNearBottom) {
             msgBox.scrollTop = msgBox.scrollHeight;
         }
     });
@@ -103,7 +159,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!message) return;
 
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ username, message }));
+            ws.send(JSON.stringify({ username, message, tabID: tabID }));
+            saveMessageToDB(message);
             messageInput.value = "";
         } else {
             console.warn("WebSocket är inte öppen!");

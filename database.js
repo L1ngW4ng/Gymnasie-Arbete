@@ -8,7 +8,7 @@ const pool = new Pool({
   port: 5432
 });
 
-(async () => {
+( async () => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -22,9 +22,24 @@ const pool = new Pool({
         bio TEXT
       )
     `);
-    console.log("Database is ready");
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        room_id TEXT NOT NULL,
+        sender TEXT NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_messages_room_id ON messages(room_id)
+    `);
+
+    console.log("Database initialized");
   } catch (err) {
-    console.error("DB-fel:", err);
+    console.error("Database initialization error:", err);
   }
 })();
 

@@ -40,6 +40,39 @@ app.get("/", (req, res) => {
     res.json({ message: "The server works!" });
 });
 
+
+app.post("/test/message", async (req, res) => {
+    try {
+        const { room_id, sender, content } = req.body;
+
+        await db.query(
+            "INSERT INTO messages (room_id, sender, content) VALUES ($1, $2, $3)",
+            [room_id, sender, content]
+            );
+
+        res.sendStatus(201);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: "Error saving message"});
+    }
+});
+
+app.get("/test/messages/:room_id", async (req, res) => {
+    try {
+        const { room_id } = req.params;
+
+        const result = await db.query(
+            "SELECT sender, content, created_at FROM messages WHERE room_id = $1 ORDER BY created_at ASC",
+            [room_id]
+        );
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Error retrieving messages" });
+    }
+});
+
 // === Hämta användardata ===
 app.get("/user/:username", async (req, res) => {
     const { username } = req.params;
