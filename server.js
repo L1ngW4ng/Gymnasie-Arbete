@@ -29,7 +29,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(bodyParser.text({ type: "text/*" }));
+app.use(bodyParser.text({ type: "*/*" })); // tillfälligt för sendBeacon
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -48,7 +50,7 @@ app.post("/test/message", async (req, res) => {
         await db.query(
             "INSERT INTO messages (room_id, sender, content) VALUES ($1, $2, $3)",
             [room_id, sender, content]
-            );
+        );
 
         res.sendStatus(201);
     } catch (err) {
@@ -66,7 +68,13 @@ app.get("/test/messages/:room_id", async (req, res) => {
             [room_id]
         );
 
-        res.json(result.rows);
+        const messages = result.rows.map(r => ({
+            sender: r.sender,
+            content: r.content,
+            created_at: r.created_at
+        }));
+
+        res.json(messages);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Error retrieving messages" });
@@ -130,10 +138,18 @@ app.post("/login", async (req, res) => {
         if (!user)
             return res.status(400).json({ success: false, message: "Wrong username or password" });
 
+        // ✅ Kolla om användaren redan är inloggad
+        if (user.is_logged_in) {
+            return res.status(400).json({ success: false, message: "User logged in on another device" });
+        }
+
         const match = await bcrypt.compare(password, user.password);
         if (!match)
             return res.status(400).json({ success: false, message: "Wrong username or password" });
-        // ✅ Skicka JSON med användardata
+
+        // ✅ Sätt användaren som inloggad
+        await db.query("UPDATE users SET is_logged_in = TRUE WHERE username = $1", [username]);
+
         res.json({
             success: true,
             message: "Login successful!",
@@ -150,6 +166,26 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ success: false, message: "Error in database query" });
     }
 });
+
+
+app.post("/logout", async (req, res) => {
+    try {
+        const { userID } = req.body; // bodyParser/express.json har redan parsat JSON
+        if (!userID) return res.status(400).json({ success: false, message: "userID missing" });
+
+        await db.query("UPDATE users SET is_logged_in = FALSE WHERE id = $1", [userID]);
+
+        res.json({ success: true, message: "Logout successful" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "Error logging out" });
+    }
+});
+
+
+
+
+
 
 
 // === Starta server ===

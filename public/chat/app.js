@@ -10,34 +10,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const API_URL = window.location.origin;
     const room_id = "general";
 
+    // Tab-ID
     let tabID = sessionStorage.getItem("tabID");
     if (!tabID) {
         tabID = Math.random().toString(36).substring(2, 9);
+        sessionStorage.setItem("tabID", tabID);
     }
 
-    // Server notification elements
+    // Server notification element
     const notification = document.getElementById("server-notifications");
 
-    // === Hämta användardata från sessionStorage ===
+    // Hämta userData från sessionStorage
     let userData = JSON.parse(sessionStorage.getItem("userData"));
     let username, profile_picture;
 
-    // === Om ingen användare finns, skapa gäst ===
     if (!userData) {
         username = "Guest" + Math.floor(Math.random() * 1000);
         profile_picture = `${API_URL}/uploads/default-profile.png`;
-        userData = { username, profile_picture: null }; // store null for guest
+        userData = { username, profile_picture: null };
         sessionStorage.setItem("userData", JSON.stringify(userData));
     } else {
         username = userData.username;
-        // if profile_picture exists, prepend /uploads/ to the filename
         profile_picture = userData.profile_picture
             ? `${API_URL}/uploads/${userData.profile_picture}`
             : `${API_URL}/uploads/default-profile.png`;
     }
 
-
-    // === Visa profil ===
+    // Visa profil
     function updateProfileDisplay(username, profile_picture) {
         const imgSrc = profile_picture || `${API_URL}/uploads/default-profile.png`;
         displayContainer.innerHTML = `
@@ -45,156 +44,128 @@ document.addEventListener("DOMContentLoaded", function () {
             <h3 id="displayUsername">${username}</h3>
         `;
     }
-
     updateProfileDisplay(username, profile_picture);
 
-    // === Hover på popup-knapp ===
+    // Hover popup-knapp
     hoverBtn.addEventListener("mouseenter", () => popup.style.backgroundColor = "lightgray");
     hoverBtn.addEventListener("mouseleave", () => popup.style.backgroundColor = "rgba(141,141,141,0.716)");
 
-    // === Server notification close button ===
-    // const notification = document.getElementById("server-notifications");
+    // Server notification close
     if (notification) {
         const notificationCross = notification.querySelector(".notification-cross");
         if (notificationCross) {
-            notificationCross.addEventListener("click", () => {
-                notification.style.display = "none";
-            });
+            notificationCross.addEventListener("click", () => notification.style.display = "none");
         }
     }
 
-
-
+    // Load messages
     async function loadMessages() {
         try {
             const res = await fetch(`${API_URL}/test/messages/${room_id}`);
             const messages = await res.json();
-
             msgBox.innerHTML = "";
             messages.forEach(msg => {
                 const p = document.createElement("p");
-                if (msg.sender === username) {
-                    p.innerHTML = `<strong>You:</strong> ${escapeHtml(msg.content)}`;
-                } else {
-                    p.innerHTML = `<strong>${escapeHtml(msg.sender)}:</strong> ${escapeHtml(msg.content)}`;
-                }
+                p.innerHTML = msg.sender === username
+                    ? `<strong>You:</strong> ${escapeHtml(msg.content)}`
+                    : `<strong>${escapeHtml(msg.sender)}:</strong> ${escapeHtml(msg.content)}`;
                 msgBox.appendChild(p);
             });
-
             msgBox.scrollTop = msgBox.scrollHeight;
         } catch (err) {
             console.error("Error loading messages:", err);
         }
     }
-
     loadMessages();
-
-
 
     async function saveMessageToDB(content) {
         try {
             await fetch(`${API_URL}/test/message`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    room_id: room_id,
-                    sender: username,
-                    content
-                })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ room_id, sender: username, content })
             });
         } catch (err) {
             console.error("Error saving message to database:", err);
         }
     }
 
-
-    // === WebSocket ===
+    // WebSocket
     const ws = new WebSocket('ws://localhost:8080');
-
     ws.addEventListener("open", () => console.log("WebSocket connected"));
-
     ws.addEventListener("message", (event) => {
         const data = JSON.parse(event.data);
-
-        // Check if user was near bottom
         const wasNearBottom = msgBox.scrollTop + msgBox.clientHeight >= msgBox.scrollHeight - 50;
-
-        // Create message element
         const p = document.createElement("p");
-        if (data.username === username) {
-            p.innerHTML = `<strong>You:</strong> ${escapeHtml(data.message)}`;
-        } else {
-            p.innerHTML = `<strong>${escapeHtml(data.username)}:</strong> ${escapeHtml(data.message)}`;
-        }
-
+        p.innerHTML = data.username === username
+            ? `<strong>You:</strong> ${escapeHtml(data.message)}`
+            : `<strong>${escapeHtml(data.username)}:</strong> ${escapeHtml(data.message)}`;
         msgBox.appendChild(p);
-
-        if (data.tabID === tabID) {
-            msgBox.scrollTop = msgBox.scrollHeight;
-        } else if (wasNearBottom) {
-            msgBox.scrollTop = msgBox.scrollHeight;
-        }
+        if (data.tabID === tabID || wasNearBottom) msgBox.scrollTop = msgBox.scrollHeight;
     });
-
-    ws.addEventListener("close", () => {
-        console.log("WebSocket closed");
-        showServerOfflineMessage();
-    });
-
-    ws.addEventListener("error", (e) => {
-        console.error("WebSocket error", e);
-        showServerOfflineMessage();
-    });
+    ws.addEventListener("close", () => showServerOfflineMessage());
+    ws.addEventListener("error", () => showServerOfflineMessage());
 
     function showServerOfflineMessage() {
-        notification.style.display = "flex"; // Show the notification
-        console.log("Server is offline notification shown");
+        if (notification) notification.style.display = "flex";
     }
 
-    // === Skicka meddelande ===
+    // Skicka meddelande
     function sendMessage() {
         const message = messageInput.value.trim();
         if (!message) return;
-
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ username, message, tabID: tabID }));
+            ws.send(JSON.stringify({ username, message, tabID }));
             saveMessageToDB(message);
             messageInput.value = "";
         } else {
-            console.warn("WebSocket är inte öppen!");
             showServerOfflineMessage();
         }
     }
-
     sendBtn.addEventListener("click", sendMessage);
-    messageInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
+    messageInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); sendMessage(); } });
 
-    // === Guest-knapp ===
-    window.guestUser = function() {
+    // Guest-knapp
+    window.guestUser = function () {
+        if (userData && userData.id) {
+            const data = JSON.stringify({ userID: userData.id });
+            const blob = new Blob([data], { type: "application/json" });
+            navigator.sendBeacon(`${API_URL}/logout`, blob);
+        }
+
         const guestName = "Guest" + Math.floor(Math.random() * 1000);
-        const guestPic = `${API_URL}/uploads/default-profile.png`;
-        sessionStorage.setItem("userData", JSON.stringify({ username: guestName, profile_picture: guestPic }));
-        updateProfileDisplay(guestName, guestPic);
+
+        userData = {
+            username: guestName,
+            profile_picture: "default-profile.png"
+        };
+
+        sessionStorage.setItem("userData", JSON.stringify(userData));
+
+        updateProfileDisplay(guestName, null);
     };
 
-    // === Popup login-spara ===
-    window.saveUsername = function(userName) {
+
+    // Popup login-spara
+    window.saveUsername = function (userName) {
         if (!userName) return;
-        const newUserData = { username: userName.trim(), profile_picture: profile_picture };
+        const newUserData = { username: userName.trim(), profile_picture };
         sessionStorage.setItem("userData", JSON.stringify(newUserData));
         popup.style.visibility = "hidden";
         blurBg.style.visibility = "hidden";
         updateProfileDisplay(newUserData.username, newUserData.profile_picture);
     };
 
-    // === HTML-escape ===
+    // Logout med sendBeacon
+    window.addEventListener("beforeunload", () => {
+        if (userData && userData.id) {
+            const data = JSON.stringify({ userID: userData.id });
+            const blob = new Blob([data], { type: "application/json" });
+            navigator.sendBeacon(`${API_URL}/logout`, blob);
+        }
+    });
+
+    // HTML escape
     function escapeHtml(text) {
         return text
             .replace(/&/g, "&amp;")

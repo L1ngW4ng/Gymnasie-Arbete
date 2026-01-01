@@ -263,23 +263,25 @@ button {
     position: absolute;
     left: 50%;
     transform: translateX(-50%); /* Center horizontally */
-    border: 2px solid rgb(160, 159, 159);
-    border-radius: 25px;
-    padding: 10px 20px;       /* Adjust padding for spacing */
-    background-color: rgb(236, 236, 236);
+    border: 2px solid rgb(186, 183, 8);
+    border-radius: 15px;
+    padding: 25px 50px;       /* Adjust padding for spacing */
+    background-color: rgb(255, 252, 157);
     top: 5%;
     gap: 10px;                /* Space between text and button */
+    padding-right: 65px;
 }
 
 .notification-message p {
-    margin: 30px 0;            /* Space between paragraphs */
+    margin: 0px 0;            /* Space between paragraphs */
 }
 .notification-message {
+    /* position: absolute; */
     display: flex;
     flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
+    text-align: left;
+    justify-content: left;
+    align-items: left;
     gap: -20px;
     padding: -20px;
 }
@@ -287,7 +289,10 @@ button {
 .notification-cross {
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: 20px;
+    position: absolute;
+    top: calc(100% - 50px);
+    right: 4%;
     cursor: pointer;
 }
 

@@ -27,7 +27,8 @@ function login(username, password) {
 
         // Save full user data
         const user = data.userData;
-        sessionStorage.setItem("username", user.username);
+        // Onödigt att spara bara användarnamnet, och det ställer till problem med gästanvändare
+        // sessionStorage.setItem("username", user.username);
         sessionStorage.setItem("userData", JSON.stringify(user));
 
         console.log("Inloggning lyckades:", user);

@@ -11,6 +11,8 @@ Guest514(2)       -> Det står fortfarande You:, fast att det ska stå L1ngW4ng:
 
 
 3:
+// FIXME: When the ws-server is back online, remove the notification message, and maybe put up a new one that's green and says that the servers are back on. Also change the color of the servers down message to yellow instead of gray!
+
 // TODO: Add DM functions and add to the database structure
 
 // FIXME: Fix GUI, more colors, better CSS with sidepanel and text cropping and everything
